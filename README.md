@@ -1,5 +1,15 @@
 # About this Repo
 
+This is a fork from the official Git repo of the Docker image for redis.
+It has a few important additional changes:
+1. Under the 3.2 folder it has now a Dockerfile allowing to build an image based on Ubuntu Xenial (16.04)
+1. The image for Xenial is based on Redis 3.2.3 and has a few modified files in it.
+ 1. wait-for-it.sh: a shell script based on https://github.com/vishnubob/wait-for-it. This allows me to wait for all redis nodes to be available when launched in a docker container before I can execute the script to create a cluster
+ 2. redis-trib.rb: a Ruby script which is part of the redis sources. However, the original assumes that the script gets launched interactively and expects input from stdin hence blocking the execution from a script. This version contains a simple change to remove that which allows me to execute it from a bash script. Also, this script is normally not available in a redis "binary" distribution.
+ 3. docker-entrypoint.sh: this is based on the original script, but with some modifications. It now accepts two additional commands: "redis-cluster" which will start redis in cluster-mode and "create-cluster" which will invoke the redis-trib.rb script from above to form a cluster from the previously launched redis nodes.
+
+Please let me know if you find this useful. Maybe we can merge this back into the main branch.
+
 This is the Git repo of the Docker [official image](https://docs.docker.com/docker-hub/official_repos/) for [redis](https://registry.hub.docker.com/_/redis/). See [the Docker Hub page](https://registry.hub.docker.com/_/redis/) for the full readme on how to use this Docker image and for information regarding contributing and issues.
 
 The full readme is generated over in [docker-library/docs](https://github.com/docker-library/docs), specifically in [docker-library/docs/redis](https://github.com/docker-library/docs/tree/master/redis).
